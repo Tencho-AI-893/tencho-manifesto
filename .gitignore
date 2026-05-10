@@ -1,0 +1,31 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.vscode/
+.idea/
+
+# OneDrive sync artifacts
+*.tmp
+~$*
+
+# Build / dependencies (将来のL2移行に備えた予防)
+node_modules/
+dist/
+.next/
+.cache/
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Working notes (公開しない作業メモ)
+NOTES.md
+TODO.md
+.claude/

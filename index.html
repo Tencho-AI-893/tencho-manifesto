@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TENCHO AI ECONOMY ｜ AIを、使わせろ。</title>
+<meta name="description" content="AI を握る巨人と、握られる個人の構造を反転させる。TENCHO AI ECONOMY ── 個人がAIを使い倒し、AI経済圏の天頂に立つための義の経済圏。">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Old+Mincho:wght@700;900&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          onyx:    { 950:'#0a0a0a', 900:'#0f0f0f', 800:'#1a1a1a', 700:'#262626' },
+          crimson: { 500:'#ef4444', 600:'#dc2626', 700:'#b91c1c', 800:'#991b1b', 900:'#7f1d1d' },
+          cyber:   '#22d3ee',
+          gold:    '#fbbf24',
+          term:    '#4ade80',
+          ink:     { 50:'#fafaf9', 100:'#f5f5f4', 300:'#a3a3a3', 500:'#737373', 600:'#525252', 700:'#404040' },
+        },
+        fontFamily: {
+          sans:   ['Inter', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'sans-serif'],
+          mono:   ['JetBrains Mono', 'monospace'],
+          serif:  ['Shippori Mincho B1', 'Zen Old Mincho', 'serif'],
+        },
+      },
+    },
+  }
+</script>
+<style>
+  :root { color-scheme: dark; }
+  html { scroll-behavior: smooth; background: #0a0a0a; }
+  body {
+    background: #0a0a0a;
+    color: #f5f5f4;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+  ::selection { background: #ef4444; color: #0a0a0a; }
+
+  /* === STYLE 01: Cyberpunk Neon Grid === */
+  .cy-grid {
+    background-image:
+      linear-gradient(to right, rgba(239,68,68,.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(239,68,68,.07) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .cy-grid-fine {
+    background-image:
+      linear-gradient(to right, rgba(34,211,238,.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(34,211,238,.04) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  /* === STYLE 02: Glitch Text === */
+  .glitch { position: relative; display: inline-block; }
+  .glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+  .glitch::before { color: #22d3ee; transform: translate(-2px, 0); mix-blend-mode: screen; clip-path: polygon(0 0,100% 0,100% 45%,0 45%); animation: glitch1 4s infinite steps(1); }
+  .glitch::after  { color: #ef4444; transform: translate(2px, 0);  mix-blend-mode: screen; clip-path: polygon(0 55%,100% 55%,100% 100%,0 100%); animation: glitch2 4s infinite steps(1); }
+  @keyframes glitch1 {
+    0%,92%,100% { transform: translate(0,0); opacity: 0; }
+    93% { transform: translate(-3px,1px); opacity: 1; }
+    94% { transform: translate(2px,-1px); opacity: 1; }
+    95% { transform: translate(-1px,2px); opacity: 1; }
+    96% { transform: translate(0,0); opacity: 0; }
+  }
+  @keyframes glitch2 {
+    0%,92%,100% { transform: translate(0,0); opacity: 0; }
+    93% { transform: translate(2px,-1px); opacity: 1; }
+    94% { transform: translate(-2px,1px); opacity: 1; }
+    95% { transform: translate(1px,-2px); opacity: 1; }
+    96% { transform: translate(0,0); opacity: 0; }
+  }
+
+  /* === STYLE 03: CRT Scan-line === */
+  .crt::after {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 50;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 3px);
+    mix-blend-mode: overlay;
+  }
+
+  /* === STYLE 04: Mono-Digit Big Number === */
+  .digit { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; }
+
+  /* === STYLE 11: Vertical Kanji === */
+  .vrt {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-family: 'Zen Old Mincho','Shippori Mincho B1', serif;
+    letter-spacing: 0.4em;
+  }
+
+  /* === STYLE 12: Hanko (印章) === */
+  .hanko {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 5.5rem; height: 5.5rem;
+    background: #b91c1c;
+    color: #fafaf9;
+    font-family: 'Zen Old Mincho','Shippori Mincho B1', serif;
+    font-weight: 800;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    padding: 0.6rem 0.4rem;
+    box-shadow: inset 0 0 0 3px #b91c1c, inset 0 0 0 5px #fafaf9, inset 0 0 0 6px #b91c1c, 0 4px 24px rgba(185,28,28,.35);
+    transform: rotate(-4deg);
+    filter: contrast(1.05) saturate(1.1);
+  }
+  .hanko-sm { width: 3.25rem; height: 3.25rem; padding: .25rem; box-shadow: inset 0 0 0 2px #b91c1c, inset 0 0 0 3.5px #fafaf9, inset 0 0 0 4.5px #b91c1c; }
+
+  /* === STYLE 14: HUD corner brackets === */
+  .hud { position: relative; }
+  .hud::before, .hud::after,
+  .hud > .hud-tl, .hud > .hud-br {
+    content: ''; position: absolute; width: 14px; height: 14px;
+    border-color: #ef4444;
+  }
+  .hud::before { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+  .hud::after  { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+  .hud > .hud-tl { bottom: -1px; left: -1px; border-bottom: 2px solid #ef4444; border-left: 2px solid #ef4444; }
+  .hud > .hud-br { bottom: -1px; right: -1px; border-bottom: 2px solid #ef4444; border-right: 2px solid #ef4444; }
+
+  /* === STYLE 13: CLI Block === */
+  .cli {
+    font-family: 'JetBrains Mono', monospace;
+    background: #0a0a0a;
+    border: 1px solid #262626;
+    border-radius: 12px;
+    padding: 28px 28px 28px 28px;
+    color: #d4d4d4;
+    font-size: 14px;
+    line-height: 1.85;
+    position: relative;
+    overflow-x: auto;
+  }
+  .cli::before {
+    content: '● ● ●';
+    position: absolute; top: 12px; left: 18px;
+    color: #404040; font-size: 10px; letter-spacing: .3em;
+  }
+  .cli .pmt { color: #ef4444; }
+  .cli .com { color: #525252; }
+  .cli .grn { color: #4ade80; }
+  .cli .cyn { color: #22d3ee; }
+  .cli .ylw { color: #fbbf24; }
+  .cli .wht { color: #fafaf9; font-weight: 600; }
+
+  /* === STYLE 10: Sticky Scroll Reveal === */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.is-in { opacity: 1; transform: translateY(0); }
+
+  /* === STYLE 06: Heatmap === */
+  .heat-cell { aspect-ratio: 1/1; border-radius: 2px; }
+
+  /* Live blink */
+  .live::before {
+    content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: #4ade80; box-shadow: 0 0 12px #4ade80;
+    margin-right: 8px; animation: blink 1.4s infinite;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+
+  /* Sumi underline */
+  .sumi {
+    background-image: linear-gradient(transparent 60%, rgba(239,68,68,.45) 60%, rgba(239,68,68,.45) 92%, transparent 92%);
+    padding: 0 .15em;
+  }
+
+  /* Marquee for Trust Bar */
+  .marquee { display: flex; gap: 4rem; animation: scroll 40s linear infinite; }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* Cursor for terminal */
+  .caret::after { content: '▊'; color: #ef4444; animation: blink 1s infinite; margin-left: 2px; }
+</style>
+</head>
+<body class="bg-onyx-950 text-ink-100 font-sans crt">
+
+<!-- ============================================================
+     STYLE INDEX (debug / pedagogy comment block)
+     01 Neon Grid  02 Glitch  03 CRT  04 Mono Digit  05 Sparkline
+     06 Heatmap    07 Display Type  08 Asymmetric  09 Whitespace
+     10 Reveal     11 Vertical Kanji  12 Hanko  13 CLI  14 Brutalist
+============================================================== -->
+
+<!-- ============ NAV ============ -->
+<nav class="fixed top-0 inset-x-0 z-40 backdrop-blur-md bg-onyx-950/70 border-b border-onyx-800">
+  <div class="max-w-[1320px] mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-3">
+      <span class="hanko-sm hanko" style="font-size:11px; transform: rotate(-3deg);">天頂</span>
+      <span class="font-serif text-[15px] tracking-[0.25em] text-ink-100">TENCHO <span class="text-crimson-500">AI</span> ECONOMY</span>
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-[12px] tracking-[0.2em] uppercase text-ink-300">
+      <a href="#manifesto" class="hover:text-ink-100 transition">Manifesto</a>
+      <a href="#problem" class="hover:text-ink-100 transition">The Problem</a>
+      <a href="#doctrine" class="hover:text-ink-100 transition">Doctrine</a>
+      <a href="#economy" class="hover:text-ink-100 transition">Economy</a>
+      <a href="#membership" class="hover:text-ink-100 transition">Membership</a>
+    </div>
+    <a href="#cta" class="font-mono text-[12px] tracking-[0.18em] uppercase px-5 py-2.5 bg-crimson-600 text-ink-50 hover:bg-crimson-500 transition">
+      盃を交わす ↗
+    </a>
+  </div>
+  <div class="h-px bg-gradient-to-r from-transparent via-crimson-700 to-transparent"></div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="top" class="relative pt-32 pb-32 overflow-hidden cy-grid">
+  <div class="absolute inset-0 cy-grid-fine opacity-50"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(239,68,68,0.15),_transparent_60%)]"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(34,211,238,0.08),_transparent_50%)]"></div>
+
+  <!-- Floating vertical kanji column -->
+  <div class="hidden lg:flex absolute top-32 right-10 flex-col items-center gap-6 opacity-30">
+    <div class="vrt text-[28px] text-ink-300">天頂経済圏</div>
+    <div class="w-px h-24 bg-gradient-to-b from-crimson-700 to-transparent"></div>
+    <div class="hanko-sm hanko" style="font-size:9px;">義</div>
+  </div>
+
+  <div class="relative max-w-[1320px] mx-auto px-6 lg:px-10">
+    <!-- Eyebrow -->
+    <div class="flex items-center gap-3 mb-10 reveal">
+      <span class="font-mono text-[11px] tracking-[0.3em] text-crimson-500 uppercase live">Live Manifesto · 2026</span>
+      <span class="font-mono text-[11px] tracking-[0.2em] text-ink-500">/ TENCHO_AI_ECONOMY_v2.0</span>
+    </div>
+
+    <!-- H1 with glitch -->
+    <h1 class="font-serif font-black leading-[0.95] tracking-tight mb-10 reveal">
+      <span class="block text-[clamp(56px,9vw,148px)] text-ink-100">AIを、</span>
+      <span class="block text-[clamp(56px,9vw,148px)] text-crimson-500 glitch" data-text="使わせろ。">使わせろ。</span>
+    </h1>
+
+    <!-- Lead with sumi underline -->
+    <p class="max-w-[640px] text-[18px] md:text-[20px] leading-[1.85] text-ink-100/90 mb-14 reveal">
+      AI を握る側か、<span class="sumi">握られる側か</span>。<br>
+      AI 経済圏において、個人を喰わせるな ── <span class="sumi">喰う側に立たせろ</span>。<br>
+      <span class="font-serif text-ink-300">TENCHO AI ECONOMY は、AI を持つ巨人と持たざる個人の構造を反転させる、義の経済圏である。</span>
+    </p>
+
+    <!-- Primary stats: Bloomberg digit + sparkline -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-onyx-800 border border-onyx-800 mb-14 reveal max-w-5xl">
+      <div class="bg-onyx-900 p-6 hud"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="font-mono text-[10px] tracking-[0.25em] text-ink-500 uppercase mb-3">Members</div>
+        <div class="digit text-[42px] font-bold text-ink-50 leading-none">12,847</div>
+        <div class="flex items-center gap-2 mt-3">
+          <svg width="60" height="14" viewBox="0 0 60 14" class="text-term"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="0,10 8,9 16,11 24,7 32,8 40,4 48,5 60,2"/></svg>
+          <span class="font-mono text-[11px] text-term">+18.4%</span>
+        </div>
+      </div>
+      <div class="bg-onyx-900 p-6 hud"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="font-mono text-[10px] tracking-[0.25em] text-ink-500 uppercase mb-3">GMV / month</div>
+        <div class="digit text-[42px] font-bold text-ink-50 leading-none">¥84.2<span class="text-[28px] text-ink-300">M</span></div>
+        <div class="flex items-center gap-2 mt-3">
+          <svg width="60" height="14" viewBox="0 0 60 14" class="text-term"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="0,12 8,10 16,11 24,9 32,7 40,8 48,5 60,3"/></svg>
+          <span class="font-mono text-[11px] text-term">+22.1%</span>
+        </div>
+      </div>
+      <div class="bg-onyx-900 p-6 hud"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="font-mono text-[10px] tracking-[0.25em] text-ink-500 uppercase mb-3">AI Tokens / day</div>
+        <div class="digit text-[42px] font-bold text-ink-50 leading-none">3.4<span class="text-[28px] text-ink-300">B</span></div>
+        <div class="flex items-center gap-2 mt-3">
+          <svg width="60" height="14" viewBox="0 0 60 14" class="text-cyber"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="0,9 8,11 16,8 24,9 32,6 40,7 48,4 60,3"/></svg>
+          <span class="font-mono text-[11px] text-cyber">+41.7%</span>
+        </div>
+      </div>
+      <div class="bg-onyx-900 p-6 hud"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="font-mono text-[10px] tracking-[0.25em] text-ink-500 uppercase mb-3">Retention</div>
+        <div class="digit text-[42px] font-bold text-ink-50 leading-none">96.3<span class="text-[28px] text-ink-300">%</span></div>
+        <div class="flex items-center gap-2 mt-3">
+          <svg width="60" height="14" viewBox="0 0 60 14" class="text-gold"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="0,4 8,5 16,3 24,4 32,3 40,4 48,2 60,3"/></svg>
+          <span class="font-mono text-[11px] text-gold">12mo+</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="flex flex-wrap gap-4 reveal">
+      <a href="#cta" class="group inline-flex items-center gap-3 bg-crimson-600 hover:bg-crimson-500 text-ink-50 font-mono text-[13px] tracking-[0.2em] uppercase px-8 py-5 transition relative hud">
+        <span class="hud-tl"></span><span class="hud-br"></span>
+        盃を交わす
+        <span class="group-hover:translate-x-1 transition">→</span>
+      </a>
+      <a href="#manifesto" class="inline-flex items-center gap-3 border border-onyx-700 hover:border-ink-300 text-ink-100 font-mono text-[13px] tracking-[0.2em] uppercase px-8 py-5 transition">
+        七箇条を読む
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TICKER (Trust Bar reimagined) ============ -->
+<section class="border-y border-onyx-800 bg-onyx-900/60 py-6 overflow-hidden">
+  <div class="flex items-center gap-12">
+    <div class="shrink-0 pl-6 lg:pl-10">
+      <span class="font-mono text-[10px] tracking-[0.3em] text-crimson-500 uppercase live">Active Channels</span>
+    </div>
+    <div class="overflow-hidden flex-1">
+      <div class="marquee font-mono text-[13px] text-ink-300 whitespace-nowrap">
+        <div class="flex gap-12 items-center">
+          <span><span class="text-cyber">claude-opus-4.7</span> <span class="text-term">●</span> 2,847 active</span>
+          <span><span class="text-cyber">gpt-5-pro</span> <span class="text-term">●</span> 1,932 active</span>
+          <span><span class="text-cyber">gemini-3.5</span> <span class="text-term">●</span> 1,104 active</span>
+          <span><span class="text-cyber">grok-4</span> <span class="text-term">●</span> 712 active</span>
+          <span><span class="text-cyber">deepseek-v4</span> <span class="text-term">●</span> 538 active</span>
+          <span><span class="text-cyber">llama-4-405b</span> <span class="text-term">●</span> 421 active</span>
+          <span><span class="text-cyber">mistral-large-3</span> <span class="text-term">●</span> 287 active</span>
+          <span><span class="text-cyber">qwen-3</span> <span class="text-term">●</span> 196 active</span>
+        </div>
+        <div class="flex gap-12 items-center" aria-hidden="true">
+          <span><span class="text-cyber">claude-opus-4.7</span> <span class="text-term">●</span> 2,847 active</span>
+          <span><span class="text-cyber">gpt-5-pro</span> <span class="text-term">●</span> 1,932 active</span>
+          <span><span class="text-cyber">gemini-3.5</span> <span class="text-term">●</span> 1,104 active</span>
+          <span><span class="text-cyber">grok-4</span> <span class="text-term">●</span> 712 active</span>
+          <span><span class="text-cyber">deepseek-v4</span> <span class="text-term">●</span> 538 active</span>
+          <span><span class="text-cyber">llama-4-405b</span> <span class="text-term">●</span> 421 active</span>
+          <span><span class="text-cyber">mistral-large-3</span> <span class="text-term">●</span> 287 active</span>
+          <span><span class="text-cyber">qwen-3</span> <span class="text-term">●</span> 196 active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MANIFESTO (Numbered Brutalist 7箇条) ============ -->
+<section id="manifesto" class="py-32 lg:py-40 relative">
+  <div class="max-w-[1320px] mx-auto px-6 lg:px-10">
+
+    <div class="grid lg:grid-cols-[1fr_2fr] gap-12 lg:gap-24 mb-20 reveal">
+      <div>
+        <span class="font-mono text-[11px] tracking-[0.3em] text-crimson-500 uppercase">§01 / Manifesto</span>
+        <div class="vrt mt-8 text-[36px] text-ink-100 hidden lg:inline-block">天頂宣言</div>
+      </div>
+      <div>
+        <h2 class="font-serif font-black text-[clamp(36px,5vw,72px)] leading-[1.05] mb-8">
+          AIに<span class="sumi">使われる</span>な。<br>
+          AIを<span class="text-crimson-500">使い倒せ</span>。
+        </h2>
+        <p class="text-ink-300 text-[17px] leading-[1.9] max-w-2xl">
+          ここに七箇条を掲げる。我々が AI 経済圏で何者であるか、何者でないかを定義する不可侵の宣言である。
+        </p>
+      </div>
+    </div>
+
+    <!-- Asymmetric numbered grid -->
+    <div class="grid md:grid-cols-2 gap-px bg-onyx-800 border border-onyx-800">
+      <article class="bg-onyx-900 p-10 lg:p-14 hud"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex items-baseline gap-6 mb-6">
+          <span class="digit text-[64px] font-black text-crimson-500 leading-none">01</span>
+          <span class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase">First Doctrine</span>
+        </div>
+        <h3 class="font-serif text-[26px] font-bold mb-4 leading-tight">AIは握るものではない。<br><span class="text-crimson-500">使い倒すもの</span>である。</h3>
+        <p class="text-ink-300 leading-[1.85] text-[15px]">巨大資本が独占する API は、個人が叩き続けて初めて意味を持つ。握るな、叩け。それが我々の経済学。</p>
+      </article>
+
+      <article class="bg-onyx-900 p-10 lg:p-14 hud"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex items-baseline gap-6 mb-6">
+          <span class="digit text-[64px] font-black text-crimson-500 leading-none">02</span>
+          <span class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase">Second Doctrine</span>
+        </div>
+        <h3 class="font-serif text-[26px] font-bold mb-4 leading-tight">弱者から先に、<br><span class="text-crimson-500">AIを渡せ</span>。</h3>
+        <p class="text-ink-300 leading-[1.85] text-[15px]">資本を持つ者ほど AI を持っている、という構造を反転する。我々は、持たざる者から順に AI を行き渡らせる。</p>
+      </article>
+
+      <article class="bg-onyx-900 p-10 lg:p-14 hud"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex items-baseline gap-6 mb-6">
+          <span class="digit text-[64px] font-black text-crimson-500 leading-none">03</span>
+          <span class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase">Third Doctrine</span>
+        </div>
+        <h3 class="font-serif text-[26px] font-bold mb-4 leading-tight">義のないAIは、<br><span class="text-crimson-500">ただの暴力</span>である。</h3>
+        <p class="text-ink-300 leading-[1.85] text-[15px]">技術は中立ではない。誰のために、何のために、を問わない AI は、必ず弱者を喰う。我々は義をもって AI を駆る。</p>
+      </article>
+
+      <article class="bg-onyx-900 p-10 lg:p-14 hud"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex items-baseline gap-6 mb-6">
+          <span class="digit text-[64px] font-black text-crimson-500 leading-none">04</span>
+          <span class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase">Fourth Doctrine</span>
+        </div>
+        <h3 class="font-serif text-[26px] font-bold mb-4 leading-tight">経済圏の<span class="text-crimson-500">天頂</span>に、<br>個人を立たせる。</h3>
+        <p class="text-ink-300 leading-[1.85] text-[15px]">企業の頂点ではなく、個人の天頂を作る。一人の人間が AI を駆って一国経済を動かす ── これが我々の終着点。</p>
+      </article>
+
+      <article class="bg-onyx-900 p-10 lg:p-14 hud"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex items-baseline gap-6 mb-6">
+          <span class="digit text-[64px] font-black text-crimson-500 leading-none">05</span>
+          <span class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase">Fifth Doctrine</span>
+        </div>
+        <h3 class="font-serif text-[26px] font-bold mb-4 leading-tight">情報の格差は、<br><span class="text-crimson-500">奪い返す</span>。</h3>
+        <p class="text-ink-300 leading-[1.85] text-[15px]">プロンプト、ワークフロー、モデル選定 ── これらが資本に独占される時代を終わらせる。知は同志に共有する。</p>
+      </article>
+
+      <article class="bg-onyx-900 p-10 lg:p-14 hud"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex items-baseline gap-6 mb-6">
+          <span class="digit text-[64px] font-black text-crimson-500 leading-none">06</span>
+          <span class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase">Sixth Doctrine</span>
+        </div>
+        <h3 class="font-serif text-[26px] font-bold mb-4 leading-tight">仁義は、<br><span class="text-crimson-500">コードで貫く</span>。</h3>
+        <p class="text-ink-300 leading-[1.85] text-[15px]">仁義はプロトコルである。同志を裏切らない、同志を喰わない、同志に AI を渡す ── これをコードで強制する。</p>
+      </article>
+
+      <article class="bg-onyx-900 p-10 lg:p-14 hud md:col-span-2 border-l border-crimson-700"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex items-baseline gap-6 mb-6">
+          <span class="digit text-[64px] font-black text-crimson-500 leading-none">07</span>
+          <span class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase">Final Doctrine</span>
+          <span class="hanko-sm hanko ml-auto" style="font-size:9px;">天頂</span>
+        </div>
+        <h3 class="font-serif text-[clamp(28px,3.5vw,44px)] font-bold mb-4 leading-tight">そして、<span class="text-crimson-500">叫び続けろ</span>。<br>AIを、使わせろ。</h3>
+        <p class="text-ink-300 leading-[1.85] text-[16px] max-w-3xl">声を上げない者から AI は奪われる。沈黙は同意である。我々は同志に、社会に、国家に向けて叫び続ける ── AIを、使わせろ、と。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE PROBLEM (Bloomberg Heatmap) ============ -->
+<section id="problem" class="py-32 lg:py-40 bg-onyx-900 border-y border-onyx-800 relative">
+  <div class="max-w-[1320px] mx-auto px-6 lg:px-10">
+
+    <div class="mb-20 reveal max-w-3xl">
+      <span class="font-mono text-[11px] tracking-[0.3em] text-crimson-500 uppercase">§02 / The Problem</span>
+      <h2 class="font-serif font-black text-[clamp(36px,5vw,72px)] leading-[1.05] mt-6 mb-8">
+        AIは、<span class="sumi">既に偏在している</span>。
+      </h2>
+      <p class="text-ink-300 text-[17px] leading-[1.9]">
+        所得階層別 AI 利用度ヒートマップ。<span class="text-ink-100">緑は AI を毎日使う層、赤は使わない層</span>。資本が技術を買い、技術が資本を生む ── 加速する格差の実像を可視化する。
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-[2fr_1fr] gap-12 reveal">
+      <!-- Heatmap -->
+      <div class="hud bg-onyx-950 p-8"><span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex justify-between items-center mb-6 font-mono text-[11px] text-ink-500 tracking-[0.2em] uppercase">
+          <span>AI Usage Heatmap / 2026 Q1</span>
+          <span class="live text-term">Real-time</span>
+        </div>
+
+        <!-- Column headers -->
+        <div class="grid grid-cols-[120px_repeat(8,1fr)] gap-1 mb-1 font-mono text-[10px] text-ink-500">
+          <div></div>
+          <div class="text-center">月</div>
+          <div class="text-center">火</div>
+          <div class="text-center">水</div>
+          <div class="text-center">木</div>
+          <div class="text-center">金</div>
+          <div class="text-center">土</div>
+          <div class="text-center">日</div>
+          <div class="text-center">avg</div>
+        </div>
+
+        <!-- Rows -->
+        <div id="heatmap" class="space-y-1"></div>
+
+        <div class="flex items-center justify-between mt-6 pt-6 border-t border-onyx-800 font-mono text-[10px] text-ink-500">
+          <span>Source: TENCHO Internal · n=12,847</span>
+          <div class="flex items-center gap-2">
+            <span>Low</span>
+            <div class="flex gap-px">
+              <div class="w-4 h-3" style="background:#7f1d1d"></div>
+              <div class="w-4 h-3" style="background:#b91c1c"></div>
+              <div class="w-4 h-3" style="background:#525252"></div>
+              <div class="w-4 h-3" style="background:#166534"></div>
+              <div class="w-4 h-3" style="background:#4ade80"></div>
+            </div>
+            <span>High</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Side commentary -->
+      <div class="space-y-6">
+        <div class="hud bg-onyx-950 p-6"><span class="hud-tl"></span><span class="hud-br"></span>
+          <div class="font-mono text-[10px] tracking-[0.25em] text-ink-500 uppercase mb-3">Top 1%</div>
+          <div class="digit text-[36px] font-bold text-term leading-none">94.2<span class="text-[24px] text-ink-300">%</span></div>
+          <p class="text-[13px] text-ink-300 mt-3 leading-relaxed">資本上位層は AI を毎日使う。彼らはさらに資本を増やす。</p>
+        </div>
+        <div class="hud bg-onyx-950 p-6"><span class="hud-tl"></span><span class="hud-br"></span>
+          <div class="font-mono text-[10px] tracking-[0.25em] text-ink-500 uppercase mb-3">Bottom 50%</div>
+          <div class="digit text-[36px] font-bold text-crimson-500 leading-none">8.1<span class="text-[24px] text-ink-300">%</span></div>
+          <p class="text-[13px] text-ink-300 mt-3 leading-relaxed">下位半数は月1回も触れない。差は加速度的に開く。</p>
+        </div>
+        <div class="hud bg-onyx-950 p-6 border-l-2 border-crimson-500"><span class="hud-tl"></span><span class="hud-br"></span>
+          <div class="font-mono text-[10px] tracking-[0.25em] text-crimson-500 uppercase mb-3">Δ Gap (5yr forecast)</div>
+          <div class="digit text-[36px] font-bold text-ink-50 leading-none">×11.6</div>
+          <p class="text-[13px] text-ink-300 mt-3 leading-relaxed">放置すれば 5 年で 11.6 倍 ── 取り戻せない断絶になる。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOCTRINE (Vertical Kanji + Hanko) ============ -->
+<section id="doctrine" class="py-32 lg:py-40 relative overflow-hidden">
+  <div class="absolute inset-0 cy-grid opacity-40"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(239,68,68,0.08),_transparent_70%)]"></div>
+
+  <div class="relative max-w-[1320px] mx-auto px-6 lg:px-10">
+
+    <div class="mb-20 reveal max-w-3xl">
+      <span class="font-mono text-[11px] tracking-[0.3em] text-crimson-500 uppercase">§03 / Doctrine</span>
+      <h2 class="font-serif font-black text-[clamp(36px,5vw,72px)] leading-[1.05] mt-6 mb-8">
+        三つの<span class="text-crimson-500">仁義</span>。
+      </h2>
+      <p class="text-ink-300 text-[17px] leading-[1.9]">
+        TENCHO AI ECONOMY を貫く三つの掟。これに違反した者は、たとえ親分であっても破門となる。
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8 reveal">
+
+      <article class="hud bg-onyx-900 p-10 lg:p-12 relative overflow-hidden group hover:bg-onyx-800/80 transition">
+        <span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex justify-between items-start mb-12">
+          <span class="vrt text-[42px] font-bold text-ink-100">義</span>
+          <span class="hanko hanko-sm" style="font-size:10px;">不背</span>
+        </div>
+        <div class="font-mono text-[10px] tracking-[0.25em] text-crimson-500 uppercase mb-3">Doctrine I</div>
+        <h3 class="font-serif text-[28px] font-bold mb-5 leading-tight">同志を、<br><span class="text-crimson-500">喰わない</span>。</h3>
+        <p class="text-ink-300 leading-[1.85] text-[14px]">同じ経済圏に立つ仲間から AI による収奪を行わない。同志のプロンプトを盗まない、同志の顧客を奪わない、同志のビジネスを真似て潰さない。</p>
+      </article>
+
+      <article class="hud bg-onyx-900 p-10 lg:p-12 relative overflow-hidden group hover:bg-onyx-800/80 transition">
+        <span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex justify-between items-start mb-12">
+          <span class="vrt text-[42px] font-bold text-ink-100">仁</span>
+          <span class="hanko hanko-sm" style="font-size:10px;">分配</span>
+        </div>
+        <div class="font-mono text-[10px] tracking-[0.25em] text-crimson-500 uppercase mb-3">Doctrine II</div>
+        <h3 class="font-serif text-[28px] font-bold mb-5 leading-tight">利を、<br><span class="text-crimson-500">独り占めしない</span>。</h3>
+        <p class="text-ink-300 leading-[1.85] text-[14px]">AI で得た利益の一部を経済圏に還元する。新参の同志に AI クレジットを贈る、知見を Notion で共有する、勝ち筋を独占しない。</p>
+      </article>
+
+      <article class="hud bg-onyx-900 p-10 lg:p-12 relative overflow-hidden group hover:bg-onyx-800/80 transition">
+        <span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex justify-between items-start mb-12">
+          <span class="vrt text-[42px] font-bold text-ink-100">勇</span>
+          <span class="hanko hanko-sm" style="font-size:10px;">叫喚</span>
+        </div>
+        <div class="font-mono text-[10px] tracking-[0.25em] text-crimson-500 uppercase mb-3">Doctrine III</div>
+        <h3 class="font-serif text-[28px] font-bold mb-5 leading-tight">声を、<br><span class="text-crimson-500">上げ続ける</span>。</h3>
+        <p class="text-ink-300 leading-[1.85] text-[14px]">「AI を使わせろ」と社会に向けて発信し続ける。沈黙する者から AI は奪われる。同志は X、Note、勉強会で旗を立て続ける。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ECONOMY (Code of Honor / CLI) ============ -->
+<section id="economy" class="py-32 lg:py-40 bg-onyx-900 border-y border-onyx-800">
+  <div class="max-w-[1320px] mx-auto px-6 lg:px-10">
+
+    <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+
+      <div class="reveal">
+        <span class="font-mono text-[11px] tracking-[0.3em] text-crimson-500 uppercase">§04 / The Economy</span>
+        <h2 class="font-serif font-black text-[clamp(36px,5vw,72px)] leading-[1.05] mt-6 mb-8">
+          仁義は、<br><span class="text-crimson-500">コードで貫く</span>。
+        </h2>
+        <p class="text-ink-300 text-[17px] leading-[1.9] mb-8">
+          口約束ではなく、プロトコルで仁義を強制する。すべての取引、すべてのAPIコール、すべての利益分配が、<span class="text-ink-100">スマートコントラクト</span>で記録される。
+        </p>
+        <ul class="space-y-4 text-[15px]">
+          <li class="flex gap-4">
+            <span class="font-mono text-crimson-500 mt-1">▸</span>
+            <span class="text-ink-300"><span class="text-ink-100 font-semibold">同志認証</span>: 入会時に七箇条への署名をオンチェーンで実施</span>
+          </li>
+          <li class="flex gap-4">
+            <span class="font-mono text-crimson-500 mt-1">▸</span>
+            <span class="text-ink-300"><span class="text-ink-100 font-semibold">利益分配</span>: 月次GMVの3%を経済圏共有プールへ自動送金</span>
+          </li>
+          <li class="flex gap-4">
+            <span class="font-mono text-crimson-500 mt-1">▸</span>
+            <span class="text-ink-300"><span class="text-ink-100 font-semibold">破門条項</span>: 同志からの違反通報3件で自動的に除名・資産没収</span>
+          </li>
+          <li class="flex gap-4">
+            <span class="font-mono text-crimson-500 mt-1">▸</span>
+            <span class="text-ink-300"><span class="text-ink-100 font-semibold">クレジット贈与</span>: Top 100 が新参 100 名に毎月 AI クレジット配布</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="reveal">
+        <div class="cli">
+          <div class="mb-3 mt-3"><span class="com"># tencho-ai-economy / code_of_honor.ts</span></div>
+          <div><span class="pmt">$</span> <span class="wht">tencho</span> <span class="cyn">join</span> <span class="ylw">--manifesto=v2.0</span></div>
+          <div class="com">› verifying signature on 7 doctrines...</div>
+          <div class="com">› minting samurai_token #00012848</div>
+          <div><span class="grn">✓</span> <span class="wht">welcome to TENCHO AI ECONOMY.</span></div>
+          <div class="com"></div>
+          <div><span class="pmt">$</span> <span class="wht">tencho</span> <span class="cyn">contract</span> <span class="ylw">honor.sol</span></div>
+          <div><span class="com">contract</span> <span class="cyn">CodeOfHonor</span> {</div>
+          <div>&nbsp;&nbsp;<span class="com">// 同志を、喰わない</span></div>
+          <div>&nbsp;&nbsp;<span class="cyn">modifier</span> <span class="ylw">notExploiting</span>(<span class="grn">address</span> kin) {</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cyn">require</span>(!<span class="ylw">isStealing</span>(<span class="grn">msg.sender</span>, kin), <span class="grn">"break.giri"</span>);</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;_;</div>
+          <div>&nbsp;&nbsp;}</div>
+          <div></div>
+          <div>&nbsp;&nbsp;<span class="com">// 利を、独り占めしない</span></div>
+          <div>&nbsp;&nbsp;<span class="cyn">function</span> <span class="ylw">distribute</span>() <span class="cyn">public</span> {</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="grn">uint</span> share = monthlyGMV * <span class="ylw">3</span> / <span class="ylw">100</span>;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;sharedPool.<span class="ylw">deposit</span>(share);</div>
+          <div>&nbsp;&nbsp;}</div>
+          <div></div>
+          <div>&nbsp;&nbsp;<span class="com">// 声を、上げ続ける</span></div>
+          <div>&nbsp;&nbsp;<span class="cyn">event</span> <span class="ylw">UseAI</span>(<span class="grn">string</span> message);</div>
+          <div>}</div>
+          <div></div>
+          <div><span class="pmt">$</span> <span class="wht">tencho</span> <span class="cyn">shout</span> <span class="grn">"AIを、使わせろ。"</span></div>
+          <div><span class="grn">✓</span> emitted to <span class="cyn">12,847</span> samurai. <span class="ylw">+241</span> echoed.</div>
+          <div class="caret"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MEMBERSHIP ============ -->
+<section id="membership" class="py-32 lg:py-40">
+  <div class="max-w-[1320px] mx-auto px-6 lg:px-10">
+
+    <div class="mb-20 reveal max-w-3xl">
+      <span class="font-mono text-[11px] tracking-[0.3em] text-crimson-500 uppercase">§05 / Membership</span>
+      <h2 class="font-serif font-black text-[clamp(36px,5vw,72px)] leading-[1.05] mt-6 mb-8">
+        盃の<span class="text-crimson-500">三段</span>。
+      </h2>
+      <p class="text-ink-300 text-[17px] leading-[1.9]">
+        位階は三つ。だが、上下ではない。<span class="text-ink-100">役割の違い</span>である。駆け出しは学び、衆は戦い、親分は導く。
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-px bg-onyx-800 border border-onyx-800 reveal">
+
+      <div class="bg-onyx-900 p-10 lg:p-12 hud relative">
+        <span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex items-center justify-between mb-10">
+          <div class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase">Tier I</div>
+          <span class="vrt text-[20px] text-ink-300">駆出</span>
+        </div>
+        <h3 class="font-serif text-[36px] font-bold mb-2 leading-tight">駆け出し</h3>
+        <p class="font-mono text-[12px] text-ink-300 mb-8 tracking-wider">KAKEDASHI</p>
+        <div class="digit text-[44px] font-black text-ink-50 leading-none mb-1">¥0</div>
+        <p class="text-[12px] text-ink-500 mb-10 font-mono tracking-wider">/ month · forever</p>
+        <ul class="space-y-3 text-[14px] text-ink-100/90 mb-10">
+          <li class="flex gap-3"><span class="text-crimson-500 font-mono">▸</span> 七箇条への署名・所属表明</li>
+          <li class="flex gap-3"><span class="text-crimson-500 font-mono">▸</span> 月次 100,000 AI トークン進呈</li>
+          <li class="flex gap-3"><span class="text-crimson-500 font-mono">▸</span> 同志 Discord アクセス</li>
+          <li class="flex gap-3"><span class="text-crimson-500 font-mono">▸</span> 入門勉強会（月2回）</li>
+        </ul>
+        <a href="#cta" class="block text-center border border-onyx-700 hover:border-ink-300 text-ink-100 font-mono text-[12px] tracking-[0.2em] uppercase py-4 transition">
+          盃を受ける
+        </a>
+      </div>
+
+      <div class="bg-onyx-900 p-10 lg:p-12 hud relative ring-1 ring-crimson-700">
+        <span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-crimson-600 text-ink-50 font-mono text-[10px] tracking-[0.3em] uppercase px-4 py-1">Most Chosen</div>
+        <div class="flex items-center justify-between mb-10">
+          <div class="font-mono text-[10px] tracking-[0.3em] text-crimson-500 uppercase">Tier II</div>
+          <span class="vrt text-[20px] text-crimson-500">一家衆</span>
+        </div>
+        <h3 class="font-serif text-[36px] font-bold mb-2 leading-tight">一家衆</h3>
+        <p class="font-mono text-[12px] text-ink-300 mb-8 tracking-wider">IKKA-SHU</p>
+        <div class="digit text-[44px] font-black text-ink-50 leading-none mb-1">¥9,800</div>
+        <p class="text-[12px] text-ink-500 mb-10 font-mono tracking-wider">/ month · billed yearly</p>
+        <ul class="space-y-3 text-[14px] text-ink-100/90 mb-10">
+          <li class="flex gap-3"><span class="text-crimson-500 font-mono">▸</span> 駆け出しの全特典</li>
+          <li class="flex gap-3"><span class="text-crimson-500 font-mono">▸</span> 月次 5,000,000 AI トークン</li>
+          <li class="flex gap-3"><span class="text-crimson-500 font-mono">▸</span> 親分監修プロンプトライブラリ</li>
+          <li class="flex gap-3"><span class="text-crimson-500 font-mono">▸</span> 月次 GMV プールから分配</li>
+          <li class="flex gap-3"><span class="text-crimson-500 font-mono">▸</span> 直参チャンネル（300名）</li>
+          <li class="flex gap-3"><span class="text-crimson-500 font-mono">▸</span> オフ会・道場参加権</li>
+        </ul>
+        <a href="#cta" class="block text-center bg-crimson-600 hover:bg-crimson-500 text-ink-50 font-mono text-[12px] tracking-[0.2em] uppercase py-4 transition">
+          盃を交わす ↗
+        </a>
+      </div>
+
+      <div class="bg-onyx-900 p-10 lg:p-12 hud relative">
+        <span class="hud-tl"></span><span class="hud-br"></span>
+        <div class="flex items-center justify-between mb-10">
+          <div class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase">Tier III</div>
+          <span class="vrt text-[20px] text-gold">親分</span>
+        </div>
+        <h3 class="font-serif text-[36px] font-bold mb-2 leading-tight">親分</h3>
+        <p class="font-mono text-[12px] text-ink-300 mb-8 tracking-wider">OYABUN</p>
+        <div class="digit text-[44px] font-black text-ink-50 leading-none mb-1">招待制</div>
+        <p class="text-[12px] text-ink-500 mb-10 font-mono tracking-wider">/ by recommendation only</p>
+        <ul class="space-y-3 text-[14px] text-ink-100/90 mb-10">
+          <li class="flex gap-3"><span class="text-gold font-mono">▸</span> 一家衆の全特典</li>
+          <li class="flex gap-3"><span class="text-gold font-mono">▸</span> AI トークン 無制限</li>
+          <li class="flex gap-3"><span class="text-gold font-mono">▸</span> 経済圏ガバナンス投票権</li>
+          <li class="flex gap-3"><span class="text-gold font-mono">▸</span> 駆け出し 100 名へクレジット贈与権</li>
+          <li class="flex gap-3"><span class="text-gold font-mono">▸</span> 七箇条改訂提案権</li>
+          <li class="flex gap-3"><span class="text-gold font-mono">▸</span> 直接相談（年4回）</li>
+        </ul>
+        <a href="#cta" class="block text-center border border-gold/60 hover:border-gold text-gold font-mono text-[12px] tracking-[0.2em] uppercase py-4 transition">
+          推挙を願う ↗
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="py-32 lg:py-40 bg-onyx-900 border-y border-onyx-800">
+  <div class="max-w-[1320px] mx-auto px-6 lg:px-10">
+
+    <div class="grid lg:grid-cols-[1fr_2fr] gap-12 lg:gap-24 reveal">
+
+      <div>
+        <span class="font-mono text-[11px] tracking-[0.3em] text-crimson-500 uppercase">§06 / FAQ</span>
+        <h2 class="font-serif font-black text-[clamp(32px,4vw,52px)] leading-[1.05] mt-6 mb-6">
+          問いがあれば、<br>答える。
+        </h2>
+        <p class="text-ink-300 text-[15px] leading-[1.85]">隠し事はない。納得できなければ、<span class="text-ink-100">盃を受けるな</span>。それも仁義である。</p>
+      </div>
+
+      <div class="space-y-px bg-onyx-800 border-y border-onyx-800">
+        <details class="bg-onyx-900 group">
+          <summary class="cursor-pointer p-6 lg:p-7 flex items-start gap-4 hover:bg-onyx-800/60 transition">
+            <span class="font-mono text-crimson-500 text-[14px] mt-1">Q.</span>
+            <span class="font-serif text-[18px] font-bold flex-1">「任侠」とは、反社会的な意味ですか？</span>
+            <span class="text-ink-500 text-2xl group-open:rotate-45 transition">+</span>
+          </summary>
+          <div class="px-6 lg:px-7 pb-6 lg:pb-7 pl-16 text-ink-300 leading-[1.85] text-[14.5px]">
+            違います。任侠とは「強きを挫き、弱きを助ける義の論理」であり、合法・非合法とは別軸です。我々は AI を握る巨大資本という「強者」に対抗し、AI から疎外された個人という「弱者」に AI を渡す ── その思想を任侠と呼んでいます。すべての活動は完全に合法です。
+          </div>
+        </details>
+
+        <details class="bg-onyx-900 group">
+          <summary class="cursor-pointer p-6 lg:p-7 flex items-start gap-4 hover:bg-onyx-800/60 transition">
+            <span class="font-mono text-crimson-500 text-[14px] mt-1">Q.</span>
+            <span class="font-serif text-[18px] font-bold flex-1">AIトークンとは、暗号資産ですか？</span>
+            <span class="text-ink-500 text-2xl group-open:rotate-45 transition">+</span>
+          </summary>
+          <div class="px-6 lg:px-7 pb-6 lg:pb-7 pl-16 text-ink-300 leading-[1.85] text-[14.5px]">
+            違います。Claude / GPT / Gemini など主要 AI モデルの API トークン使用権を指します。経済圏として一括契約することで、個人契約の 1/3 〜 1/5 のコストで提供しています。会員資格の証明（NFT）はオンチェーンですが、こちらは取引価値を持たせていません。
+          </div>
+        </details>
+
+        <details class="bg-onyx-900 group">
+          <summary class="cursor-pointer p-6 lg:p-7 flex items-start gap-4 hover:bg-onyx-800/60 transition">
+            <span class="font-mono text-crimson-500 text-[14px] mt-1">Q.</span>
+            <span class="font-serif text-[18px] font-bold flex-1">AIに不慣れでも、参加できますか？</span>
+            <span class="text-ink-500 text-2xl group-open:rotate-45 transition">+</span>
+          </summary>
+          <div class="px-6 lg:px-7 pb-6 lg:pb-7 pl-16 text-ink-300 leading-[1.85] text-[14.5px]">
+            むしろ歓迎します。第二箇条「弱者から先に、AIを渡せ」が我々の核です。駆け出し位階は無料で、月2回の道場（勉強会）と親分監修プロンプトライブラリで、ゼロからの立ち上げを支援します。
+          </div>
+        </details>
+
+        <details class="bg-onyx-900 group">
+          <summary class="cursor-pointer p-6 lg:p-7 flex items-start gap-4 hover:bg-onyx-800/60 transition">
+            <span class="font-mono text-crimson-500 text-[14px] mt-1">Q.</span>
+            <span class="font-serif text-[18px] font-bold flex-1">破門されると、どうなりますか？</span>
+            <span class="text-ink-500 text-2xl group-open:rotate-45 transition">+</span>
+          </summary>
+          <div class="px-6 lg:px-7 pb-6 lg:pb-7 pl-16 text-ink-300 leading-[1.85] text-[14.5px]">
+            会員資格の取消、AI トークン残高の没収、共有プール分配権の喪失となります。再加入は親分3名以上の連名推挙が必要です。仁義違反は同志からの通報3件で自動執行され、運営の恣意では発動しません。
+          </div>
+        </details>
+
+        <details class="bg-onyx-900 group">
+          <summary class="cursor-pointer p-6 lg:p-7 flex items-start gap-4 hover:bg-onyx-800/60 transition">
+            <span class="font-mono text-crimson-500 text-[14px] mt-1">Q.</span>
+            <span class="font-serif text-[18px] font-bold flex-1">退会はいつでもできますか？</span>
+            <span class="text-ink-500 text-2xl group-open:rotate-45 transition">+</span>
+          </summary>
+          <div class="px-6 lg:px-7 pb-6 lg:pb-7 pl-16 text-ink-300 leading-[1.85] text-[14.5px]">
+            可能です。盃を返す権利は会員側に常にあります。違約金等は一切ありません。ただし、未消費 AI トークンの返金には対応していません（経済圏全体の調達計画に基づくため）。
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section id="cta" class="relative py-40 lg:py-52 overflow-hidden">
+  <div class="absolute inset-0 cy-grid"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,_rgba(239,68,68,0.25),_transparent_60%)]"></div>
+  <div class="absolute inset-0 cy-grid-fine opacity-60"></div>
+
+  <div class="relative max-w-[1100px] mx-auto px-6 lg:px-10 text-center">
+
+    <div class="inline-flex items-center gap-3 mb-12 reveal">
+      <span class="hanko" style="font-size:14px;">天頂</span>
+    </div>
+
+    <span class="font-mono text-[11px] tracking-[0.3em] text-crimson-500 uppercase reveal">§07 / Take The Cup</span>
+
+    <h2 class="font-serif font-black leading-[0.95] mt-8 mb-12 reveal">
+      <span class="block text-[clamp(48px,8vw,128px)] text-ink-100">AIを、</span>
+      <span class="block text-[clamp(48px,8vw,128px)] text-crimson-500 glitch" data-text="使わせろ。">使わせろ。</span>
+    </h2>
+
+    <p class="max-w-[640px] mx-auto text-[18px] leading-[1.85] text-ink-300 mb-14 reveal">
+      声を上げない者から、AI は奪われる。<br>
+      盃を交わせ。<span class="sumi text-ink-100">同志はもう 12,847 名</span>、待っている。
+    </p>
+
+    <div class="flex flex-wrap gap-4 justify-center reveal mb-10">
+      <a href="#" class="group inline-flex items-center gap-3 bg-crimson-600 hover:bg-crimson-500 text-ink-50 font-mono text-[14px] tracking-[0.2em] uppercase px-10 py-6 transition relative hud">
+        <span class="hud-tl"></span><span class="hud-br"></span>
+        盃を交わす（一家衆になる）
+        <span class="group-hover:translate-x-1 transition">→</span>
+      </a>
+      <a href="#" class="inline-flex items-center gap-3 border border-onyx-700 hover:border-ink-300 text-ink-100 font-mono text-[14px] tracking-[0.2em] uppercase px-10 py-6 transition">
+        まず駆け出しで様子を見る
+      </a>
+    </div>
+
+    <div class="flex flex-wrap gap-x-8 gap-y-3 justify-center font-mono text-[12px] text-ink-500 reveal">
+      <a href="#" class="hover:text-ink-300 transition">› 七箇条PDFをダウンロード</a>
+      <a href="#" class="hover:text-ink-300 transition">› 親分推挙を願い出る</a>
+      <a href="#" class="hover:text-ink-300 transition">› 同志のXタイムラインを見る</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-onyx-950 border-t border-onyx-800">
+  <div class="max-w-[1320px] mx-auto px-6 lg:px-10 py-16">
+    <div class="grid md:grid-cols-[2fr_1fr_1fr_1fr] gap-12">
+      <div>
+        <div class="flex items-center gap-3 mb-6">
+          <span class="hanko hanko-sm" style="font-size:11px; transform: rotate(-3deg);">天頂</span>
+          <span class="font-serif text-[15px] tracking-[0.25em]">TENCHO <span class="text-crimson-500">AI</span> ECONOMY</span>
+        </div>
+        <p class="text-ink-300 text-[14px] leading-[1.85] max-w-md">
+          AI を、使わせろ。<br>
+          AI 経済圏の構造を反転させる、義の経済圏。
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase mb-4">Manifesto</h4>
+        <ul class="space-y-2 text-[13px] text-ink-300">
+          <li><a href="#manifesto" class="hover:text-ink-100">七箇条</a></li>
+          <li><a href="#doctrine" class="hover:text-ink-100">三つの仁義</a></li>
+          <li><a href="#economy" class="hover:text-ink-100">Code of Honor</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase mb-4">Membership</h4>
+        <ul class="space-y-2 text-[13px] text-ink-300">
+          <li><a href="#membership" class="hover:text-ink-100">駆け出し</a></li>
+          <li><a href="#membership" class="hover:text-ink-100">一家衆</a></li>
+          <li><a href="#membership" class="hover:text-ink-100">親分</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-mono text-[10px] tracking-[0.3em] text-ink-500 uppercase mb-4">Contact</h4>
+        <ul class="space-y-2 text-[13px] text-ink-300">
+          <li><a href="#" class="hover:text-ink-100">X / @tencho_ai</a></li>
+          <li><a href="#" class="hover:text-ink-100">Discord</a></li>
+          <li><a href="#" class="hover:text-ink-100">問い合わせ</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-16 pt-8 border-t border-onyx-800 flex flex-wrap gap-4 justify-between items-center font-mono text-[11px] text-ink-500">
+      <div>© 2026 TENCHO AI ECONOMY · 天頂AI経済圏 · v2.0</div>
+      <div class="flex items-center gap-6">
+        <span class="live text-term">Operational</span>
+        <span>Members 12,847</span>
+        <span>GMV ¥84.2M / mo</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // === STYLE 06: Heatmap data render ===
+  (function buildHeatmap() {
+    const root = document.getElementById('heatmap');
+    if (!root) return;
+    const tiers = [
+      { label: 'Top 1%',     base: 0.92, var: 0.06 },
+      { label: 'Top 5%',     base: 0.78, var: 0.10 },
+      { label: 'Top 20%',    base: 0.54, var: 0.14 },
+      { label: 'Middle 50%', base: 0.32, var: 0.12 },
+      { label: 'Bottom 30%', base: 0.14, var: 0.08 },
+      { label: 'Bottom 10%', base: 0.06, var: 0.04 },
+    ];
+    function colorFor(v) {
+      // 0..1 → red→gray→green
+      if (v < 0.2) return '#7f1d1d';
+      if (v < 0.4) return '#b91c1c';
+      if (v < 0.55) return '#525252';
+      if (v < 0.75) return '#166534';
+      return '#4ade80';
+    }
+    let html = '';
+    tiers.forEach(t => {
+      let row = `<div class="grid grid-cols-[120px_repeat(8,1fr)] gap-1 items-center"><div class="font-mono text-[11px] text-ink-300 truncate">${t.label}</div>`;
+      let avg = 0;
+      for (let i = 0; i < 7; i++) {
+        const noise = (Math.sin(t.label.length * 7 + i * 13.7) * 0.5 + 0.5) * t.var * 2 - t.var;
+        const v = Math.max(0, Math.min(1, t.base + noise));
+        avg += v;
+        row += `<div class="heat-cell" style="background:${colorFor(v)};opacity:${0.55 + v * 0.45}"></div>`;
+      }
+      avg = avg / 7;
+      row += `<div class="font-mono text-[11px] text-right" style="color:${colorFor(avg)}">${(avg*100).toFixed(0)}%</div>`;
+      row += '</div>';
+      html += row;
+    });
+    root.innerHTML = html;
+  })();
+
+  // === STYLE 10: Sticky Scroll Reveal ===
+  (function reveal() {
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => io.observe(el));
+  })();
+</script>
+
+</body>
+</html>
