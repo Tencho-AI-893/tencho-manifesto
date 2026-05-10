@@ -22,10 +22,12 @@
 
 ```
 L1  思想層 / Manifesto Layer  ← このリポジトリ
-    Static HTML · GitHub Pages · IPFS mirror
+    Static HTML · Tailwind CDN · GitHub Pages
+    https://tencho-ai-893.github.io/tencho-manifesto/  [LIVE · CC0]
 
-L2  事業層 / Application Layer  (予定)
-    Next.js · Auth · Stripe · Dashboard
+L2  事業層 / Application Layer
+    Vite · React · TypeScript · Tailwind v3
+    https://tencho-ai-893.github.io/tencho-ai-economy/  [LIVE]
 
 L3  プロトコル層 / Protocol Layer  (予定)
     CodeOfHonor.sol · SamuraiToken (ERC-721) on Base/Arbitrum
@@ -58,13 +60,14 @@ open index.html        # macOS
 xdg-open index.html    # Linux
 ```
 
-## デプロイ先 (予定)
+## デプロイ状況
 
 | 層 | URL | ステータス |
 |---|---|---|
-| GitHub Pages | `https://tencho-ai-893.github.io/tencho-ai-economy/` | 🚧 P1 |
-| IPFS mirror  | `ipfs://...`                                          | 🚧 P1 後半 |
-| 独自ドメイン | `manifesto.tencho.ai` (仮)                            | 🚧 P1 後半 |
+| L1 思想層 (this) | https://tencho-ai-893.github.io/tencho-manifesto/   | ✅ live |
+| L2 事業層        | https://tencho-ai-893.github.io/tencho-ai-economy/  | ✅ live (Vite/React) |
+| IPFS mirror      | (CID 取得後に追記)                                   | 🚧 P1 後半 |
+| 独自ドメイン     | `manifesto.tencho.ai` (仮)                           | 🚧 P1 後半 |
 
 ## フォーク歓迎
 
